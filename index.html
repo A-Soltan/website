@@ -25,12 +25,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-    html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 130px; 
-        }
-
-        
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -58,15 +52,8 @@
 
         /* Layout */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
-        section { padding: 6rem 0;
-                scroll-margin-top: 100px;}
-        
-/* --- FIX 2: Add scroll-margin-top to all sections --- */
-        section { 
-            padding: 6rem 0; 
-            scroll-margin-top: 130px; 
+        section { padding: 6rem 0; }
 
-        
         /* Scroll Animations Classes */
         .reveal {
             opacity: 0;
@@ -103,11 +90,10 @@
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem;
-            width: 100%;
         }
         .logo { font-weight: 700; font-size: 1.25rem; color: var(--text-main); text-decoration: none; }
         .logo span { color: var(--accent); }
-        .nav-links { display: flex; gap: 2rem; align-items: center;}
+        .nav-links { display: flex; gap: 2rem; }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -121,10 +107,8 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding-top: 130px;
+            padding-top: 5rem;
             position: relative;
-            scroll-margin-top: 130px;
-            
         }
         .hero-content { max-width: 800px; z-index: 2; }
         .hero-subtitle {
@@ -320,7 +304,7 @@
 
     <nav>
         <div class="nav-content">
-            <a href="#" class="logo">My <span>Portfolio</span></a>
+            <a href="#" class="logo">My <span>Portfolio<span style="color: var(--accent glow);"></a>
             <div class="nav-links">
                 <a href="#about">About</a>
                 <a href="#skills">Skills</a>
@@ -332,7 +316,7 @@
 
     <div class="bg-glow"></div>
 
-    <section id="about" class="container">
+    <section id="hero">
         <div class="container hero-content">
             <span class="hero-subtitle reveal reveal-up">Hi, my name is</span>
             <h1 class="reveal reveal-up delay-1">Ahmed Soltan.<br><span style="color: var(--text-muted);">I engineer and analyze data.</span></h1>
@@ -456,7 +440,7 @@
                 <ul class="project-desc">
                     <li>Programmed Arduino-based system utilizing soil moisture and temperature sensors.</li>
                     <li>Reduced water usage by 35% through real-time data automation.</li>
-                    <li>Collected and analyzed real-time environmental data to minimize resource waste through sensor-driven automation and remote system monitoring.</li>
+                    <li>•	Collected and analyzed real-time environmental data to minimize resource waste, reducing water and energy consumption through sensor-driven automation and remote system monitoring.</li>
                 </ul>
             </div>
 
