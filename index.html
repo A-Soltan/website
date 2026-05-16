@@ -1,39 +1,1238 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Soltan | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --surface-color: #1e293b;
-            --surface-hover: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --border: #334155;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmed Soltan — Mechanical Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0d1520;
+    --surface2: #111d2e;
+    --border: rgba(0,180,255,0.12);
+    --accent: #00b4ff;
+    --accent2: #00ffd0;
+    --accent3: #ff6a3d;
+    --text: #c8d8e8;
+    --text-dim: #5a7a9a;
+    --text-bright: #eaf4ff;
+    --heading: 'Bebas Neue', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Crimson Pro', serif;
+  }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+  html { scroll-behavior: smooth; }
 
-        /* Typography */
-        h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 14px;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* === CURSOR === */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,180,255,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:hover .cursor-ring { border-color: rgba(0,180,255,0.7); }
+
+  /* === CANVAS BG === */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* === NAV === */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 60px;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,12,16,0.7);
+  }
+  .nav-logo {
+    font-family: var(--heading);
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-social {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .nav-social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: var(--mono);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+  .nav-social-link:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,180,255,0.07); }
+
+
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* === HERO === */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: flex;
+    flex-direction: column;
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--accent);
+  }
+  .hero-name {
+    font-family: var(--heading);
+    font-size: clamp(72px, 8vw, 120px);
+    line-height: 0.9;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .hero-name span {
+    color: var(--accent);
+    display: block;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-style: italic;
+    color: var(--text-dim);
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+  .hero-desc {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text);
+    max-width: 460px;
+    margin-bottom: 48px;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    background: var(--accent);
+    color: #000;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* === STATS BAR === */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: var(--heading);
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 6px;
+  }
+
+  /* === ABOUT === */
+  #about {
+    padding: 120px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 72px;
+  }
+  .section-num {
+    font-family: var(--heading);
+    font-size: 80px;
+    color: var(--border);
+    line-height: 1;
+  }
+  .section-title-wrap { }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: var(--heading);
+    font-size: 56px;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 80px;
+  }
+  .about-text p {
+    font-size: 15px;
+    line-height: 2;
+    color: var(--text);
+    margin-bottom: 24px;
+    font-family: var(--serif);
+    font-weight: 300;
+  }
+  .about-text p strong {
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .skills-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+  }
+  .skills-group { margin-bottom: 32px; }
+  .skills-group:last-child { margin-bottom: 0; }
+  .skills-group-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .skills-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .skill-tag {
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* edu & certs */
+  .edu-block {
+    margin-top: 60px;
+    padding: 32px;
+    background: var(--surface);
+    border-left: 2px solid var(--accent);
+  }
+  .edu-degree {
+    font-family: var(--heading);
+    font-size: 22px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .edu-school {
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .edu-items {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .edu-items li {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+  }
+
+  /* === EXPERIENCE === */
+  #experience {
+    padding: 120px 60px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  #experience > * { max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+  .timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .timeline-item {
+    padding: 0 0 60px 48px;
+    position: relative;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .timeline-item.visible { opacity: 1; transform: translateX(0); }
+  .timeline-dot {
+    position: absolute;
+    left: -5px; top: 6px;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 16px var(--accent);
+  }
+  .timeline-period {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .timeline-role {
+    font-family: var(--heading);
+    font-size: 28px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .timeline-company {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .timeline-items {
+    list-style: none;
+  }
+  .timeline-items li {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .timeline-items li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* === PROJECTS / SERVICES === */
+  #services {
+    padding: 120px 60px;
+  }
+  #services > .section-header,
+  #services > .projects-grid {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 0;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+    transition: border-color 0.3s, transform 0.3s;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.5s, transform 0.5s, border-color 0.3s;
+  }
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+  .project-card:hover { border-color: rgba(0,180,255,0.4); transform: translateY(-4px); }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,180,255,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover::before { opacity: 1; }
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .card-num {
+    position: absolute;
+    top: 24px; right: 24px;
+    font-family: var(--heading);
+    font-size: 48px;
+    color: var(--border);
+    line-height: 1;
+  }
+  .card-title {
+    font-family: var(--heading);
+    font-size: 22px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .card-period {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .card-desc {
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  /* === SERVICES OFFERED === */
+  .services-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .service-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    transition: background 0.3s;
+  }
+  .service-item:hover { background: var(--surface); }
+  .service-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .service-title {
+    font-family: var(--heading);
+    font-size: 20px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .service-desc {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-dim);
+  }
+
+  /* === CERTIFICATIONS === */
+  #certs {
+    padding: 80px 60px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .cert-card {
+    padding: 20px 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    transition: border-color 0.2s;
+  }
+  .cert-card:hover { border-color: var(--accent); }
+  .cert-issuer {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .cert-name {
+    font-size: 13px;
+    color: var(--text-bright);
+    line-height: 1.4;
+  }
+  .cert-date {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 8px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--surface);
+    position: relative;
+    z-index: 1;
+  }
+  .footer-logo {
+    font-family: var(--heading);
+    font-size: 24px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .footer-copy {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+  }
+
+  /* === SCROLL REVEAL === */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* === GLITCH LINE === */
+  .scan-line {
+    position: fixed;
+    left: 0; right: 0;
+    height: 1px;
+    background: rgba(0,180,255,0.07);
+    pointer-events: none;
+    z-index: 50;
+    animation: scan 8s linear infinite;
+  }
+  @keyframes scan {
+    from { top: -2px; }
+    to { top: 100vh; }
+  }
+
+  /* === SCROLL SHAPES === */
+  .scroll-shape {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 1s;
+    will-change: transform;
+  }
+  .scroll-shape.visible { opacity: 1; }
+
+  /* noise overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 200;
+    opacity: 0.4;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { gap: 24px; }
+    #hero { padding: 100px 24px 60px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+    .stats-bar { padding: 24px; gap: 32px; flex-wrap: wrap; }
+    #about { padding: 80px 24px; }
+    .about-grid { grid-template-columns: 1fr; }
+    #experience { padding: 80px 24px; }
+    #services { padding: 80px 24px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .services-list { grid-template-columns: 1fr; }
+    #certs { padding: 60px 24px; }
+    .certs-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+  @media (max-width: 500px) {
+    .certs-grid { grid-template-columns: 1fr; }
+    .nav-social { gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="scan-line"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- SCROLL-DRIVEN FLOATING SHAPES -->
+<svg class="scroll-shape" id="shape1" style="width:320px;height:320px;top:15vh;right:6vw;" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="160,10 310,240 10,240" stroke="rgba(0,180,255,0.18)" stroke-width="1.5" fill="none"/>
+  <polygon points="160,50 270,220 50,220" stroke="rgba(0,180,255,0.09)" stroke-width="1" fill="none"/>
+  <polygon points="160,90 230,200 90,200" stroke="rgba(0,255,208,0.12)" stroke-width="1" fill="none"/>
+</svg>
+<svg class="scroll-shape" id="shape2" style="width:260px;height:260px;bottom:18vh;left:4vw;" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="20" y="20" width="220" height="220" stroke="rgba(0,180,255,0.15)" stroke-width="1.5" fill="none" transform="rotate(15 130 130)"/>
+  <rect x="50" y="50" width="160" height="160" stroke="rgba(0,255,208,0.1)" stroke-width="1" fill="none" transform="rotate(30 130 130)"/>
+  <rect x="80" y="80" width="100" height="100" stroke="rgba(0,180,255,0.08)" stroke-width="1" fill="none" transform="rotate(45 130 130)"/>
+</svg>
+<svg class="scroll-shape" id="shape3" style="width:200px;height:200px;top:55vh;left:2vw;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="100" cy="100" r="90" stroke="rgba(0,180,255,0.12)" stroke-width="1" fill="none" stroke-dasharray="6 8"/>
+  <circle cx="100" cy="100" r="60" stroke="rgba(0,255,208,0.1)" stroke-width="1" fill="none" stroke-dasharray="4 6"/>
+  <circle cx="100" cy="100" r="30" stroke="rgba(0,180,255,0.15)" stroke-width="1" fill="none"/>
+</svg>
+<svg class="scroll-shape" id="shape4" style="width:180px;height:180px;top:30vh;left:10vw;" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="90,5 175,175 5,175" stroke="rgba(255,106,61,0.15)" stroke-width="1.5" fill="none"/>
+  <polygon points="90,35 150,155 30,155" stroke="rgba(255,106,61,0.08)" stroke-width="1" fill="none"/>
+</svg>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">A.SOLTAN</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#services">Projects</a></li>
+  </ul>
+  <div class="nav-social">
+    <a href="mailto:Ahmedsoltan5665@gmail.com" class="nav-social-link" title="Email">✉</a>
+    <a href="https://linkedin.com/in/A-Soltan56" target="_blank" class="nav-social-link" title="LinkedIn">in</a>
+    <a href="https://github.com/A-Soltan/Portfolio" target="_blank" class="nav-social-link" title="GitHub">⌗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid">
+    <div>
+      <h1 class="hero-name">Ahmed<span>Soltan</span></h1>
+      <p class="hero-title">Mechanical Engineer &amp; Data Analyst</p>
+      <p class="hero-desc">
+        BASc Mechanical Engineering graduate from the University of Ottawa, blending precision engineering with data intelligence.
+        Experienced in CAD, FEA, machine learning, and BI -- building systems that perform in the real world.
+      </p>
+      <div class="hero-cta">
+        <a href="mailto:Ahmedsoltan5665@gmail.com?subject=Hello%20Ahmed%20-%20Portfolio%20Inquiry" class="btn-primary">✉ Get in Touch</a>
+        <a href="https://github.com/A-Soltan/Portfolio" target="_blank" class="btn-outline">⌗ View GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num" data-target="5">0</div>
+    <div class="stat-label">Major Projects</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" data-target="10">0</div>
+    <div class="stat-label">Teams Mentored</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" data-target="7">0</div>
+    <div class="stat-label">Certifications</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" data-target="3">0</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <div class="section-num">01</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">About Me</div>
+      <h2 class="section-title">ENGINEER.<br>ANALYST.<br>BUILDER.</h2>
+    </div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I'm a <strong>Mechanical Engineer</strong> who bridges the physical and digital worlds -- designing systems with SolidWorks and FEA,
+        then extracting insights from them with Python, Power BI, and machine learning.
+      </p>
+      <p>
+        Currently working as an <strong>Operations Associate at Statistics Canada</strong>, managing high-volume data pipelines and ensuring 
+        100% compliance with privacy protocols while reducing error rates and turnaround times.
+      </p>
+      <p>
+        My background spans sustainable engineering design, robotics, smart systems, project management, and data analytics. 
+        I've mentored 10+ multidisciplinary teams and led 5+ complex projects from concept to delivery using <strong>Agile methodologies</strong>.
+      </p>
+
+      <div class="edu-block">
+        <div class="edu-degree">BASc Mechanical Engineering</div>
+        <div class="edu-school">UNIVERSITY OF OTTAWA · Minor in Engineering Management & Entrepreneurship</div>
+        <ul class="edu-items">
+          <li>Merit Scholarship 2022–2025</li>
+          <li>Dean's Honour List</li>
+          <li>Admission Scholarship</li>
+          <li>Engineering Mentor — 24 months</li>
+          <li>Community Advisor in Residence</li>
+          <li>Tutor — 3+ Years</li>
+        </ul>
+      </div>
+    </div>
+    <div class="skills-panel reveal">
+      <div class="skills-group">
+        <div class="skills-group-label">Engineering & Design</div>
+        <div class="skill-tags">
+          <span class="skill-tag">SolidWorks</span>
+          <span class="skill-tag">FEA</span>
+          <span class="skill-tag">CAD</span>
+          <span class="skill-tag">MATLAB</span>
+          <span class="skill-tag">Simulink</span>
+          <span class="skill-tag">3D Printing</span>
+          <span class="skill-tag">CNC</span>
+          <span class="skill-tag">StarCCM+</span>
+          <span class="skill-tag">Arduino</span>
+          <span class="skill-tag">PID Control</span>
+          <span class="skill-tag">Heat Transfer</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Data & Analytics</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">Tableau</span>
+          <span class="skill-tag">DAX</span>
+          <span class="skill-tag">Power Query</span>
+          <span class="skill-tag">BigQuery</span>
+          <span class="skill-tag">ETL Pipelines</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Excel</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Programming & AI</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Pandas</span>
+          <span class="skill-tag">NumPy</span>
+          <span class="skill-tag">TensorFlow</span>
+          <span class="skill-tag">PyTorch</span>
+          <span class="skill-tag">LangChain</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">R</span>
+          <span class="skill-tag">GitHub</span>
+          <span class="skill-tag">Jupyter</span>
+        </div>
+      </div>
+      <div class="skills-group">
+        <div class="skills-group-label">Project Management</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Agile</span>
+          <span class="skill-tag">Scrum</span>
+          <span class="skill-tag">Kanban</span>
+          <span class="skill-tag">Asana</span>
+          <span class="skill-tag">Trello</span>
+          <span class="skill-tag">Risk Mgmt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal" style="max-width:1200px;margin:0 auto 72px;">
+    <div class="section-num">02</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Work History</div>
+      <h2 class="section-title">EXPERIENCE</h2>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">Apr 2026 – Present</div>
+      <div class="timeline-role">Operations Associate</div>
+      <div class="timeline-company">STATISTICS CANADA · Gatineau, QC</div>
+      <ul class="timeline-items">
+        <li>Managed end-to-end intake pipeline for 800–1,200+ records weekly, ensuring timely processing in a high-volume environment.</li>
+        <li>Resolved 60+ daily client inquiries, increasing submission completion rates by ~25%.</li>
+        <li>Performed data capture and validation reducing error rates by 20% and enhancing overall data quality.</li>
+        <li>Optimized workflows reducing processing turnaround time by ~15%.</li>
+        <li>Maintained 100% compliance with data privacy and security protocols -- zero data incidents.</li>
+      </ul>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">Sep 2021 – May 2024</div>
+      <div class="timeline-role">Project Manager</div>
+      <div class="timeline-company">CENTRE FOR ENTREPRENEURSHIP & ENGINEERING DESIGN · Ottawa, ON</div>
+      <ul class="timeline-items">
+        <li>Mentored 10+ multidisciplinary engineering teams, reducing design iteration time by 15% through guided best practices.</li>
+        <li>Directed feasibility & testing protocols for complex engineering projects.</li>
+        <li>Delivered 5+ complex engineering projects on time and within budget using Agile methodologies.</li>
+      </ul>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-period">Sep 2020 – Sep 2021</div>
+      <div class="timeline-role">Vice President</div>
+      <div class="timeline-company">MECHANICAL ENGINEERING STUDENT SOCIETY · Ottawa, ON</div>
+      <ul class="timeline-items">
+        <li>Orchestrated operations for a 300+ member organization, managing 8 executives.</li>
+        <li>Revitalized organizational structure and outreach, improving planning efficiency and campus influence.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS & SERVICES -->
+<section id="services">
+  <div class="section-header reveal">
+    <div class="section-num">03</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">Engineering Portfolio</div>
+      <h2 class="section-title">PROJECTS</h2>
+    </div>
+  </div>
+  <div class="projects-grid" style="margin-bottom: 80px;">
+    <div class="project-card">
+      <span class="card-num">01</span>
+      <span class="card-icon">🏠</span>
+      <div class="card-period">Sep 2024 – May 2025 · Capstone</div>
+      <h3 class="card-title">Sustainable Off-Grid Home</h3>
+      <p class="card-desc">Designed a modular, energy-efficient housing system using SolidWorks and MATLAB. Modeled thermal and solar PV systems -- achieved 40% increase in energy retention.</p>
+      <div class="card-tags">
+        <span class="card-tag">SolidWorks</span>
+        <span class="card-tag">MATLAB</span>
+        <span class="card-tag">Thermal Analysis</span>
+        <span class="card-tag">Solar PV</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="card-num">02</span>
+      <span class="card-icon">💧</span>
+      <div class="card-period">Sep 2023 – May 2024</div>
+      <h3 class="card-title">Smart Irrigation System</h3>
+      <p class="card-desc">Arduino-based automated irrigation using soil moisture and temperature sensors. Reduced water usage by 35% through real-time sensor data and remote system monitoring.</p>
+      <div class="card-tags">
+        <span class="card-tag">Arduino</span>
+        <span class="card-tag">IoT Sensors</span>
+        <span class="card-tag">Automation</span>
+        <span class="card-tag">Data Analysis</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <span class="card-num">03</span>
+      <span class="card-icon">🤖</span>
+      <div class="card-period">Jan 2023 – May 2023</div>
+      <h3 class="card-title">Search & Rescue Robot</h3>
+      <p class="card-desc">Prototyped an all-terrain robotic platform with mechanical stabilization for disaster response. Optimized stability by 25% through passive suspension and iterative testing.</p>
+      <div class="card-tags">
+        <span class="card-tag">SolidWorks</span>
+        <span class="card-tag">CAD/BOM</span>
+        <span class="card-tag">Robotics</span>
+        <span class="card-tag">Prototyping</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header reveal" style="margin-bottom:40px;">
+    <div class="section-num">04</div>
+    <div class="section-title-wrap">
+      <div class="section-eyebrow">What I Offer</div>
+      <h2 class="section-title">SERVICES</h2>
+    </div>
+  </div>
+  <div class="services-list">
+    <div class="service-item reveal">
+      <span class="service-icon">⚙️</span>
+      <div>
+        <div class="service-title">Mechanical Design & FEA</div>
+        <p class="service-desc">CAD modeling, finite element analysis, engineering drawings, BOM creation, and rapid prototyping using SolidWorks and additive manufacturing.</p>
+      </div>
+    </div>
+    <div class="service-item reveal">
+      <span class="service-icon">📊</span>
+      <div>
+        <div class="service-title">Data Analytics & BI</div>
+        <p class="service-desc">Interactive dashboards, ETL pipelines, KPI development, and data storytelling using Power BI, Tableau, SQL, and Python.</p>
+      </div>
+    </div>
+    <div class="service-item reveal">
+      <span class="service-icon">🧠</span>
+      <div>
+        <div class="service-title">AI & Machine Learning</div>
+        <p class="service-desc">Predictive modeling, sensor-driven automation, and AI-powered systems using TensorFlow, PyTorch, LangChain, and Keras.</p>
+      </div>
+    </div>
+    <div class="service-item reveal">
+      <span class="service-icon">🗂️</span>
+      <div>
+        <div class="service-title">Project Management</div>
+        <p class="service-desc">End-to-end project delivery using Agile/Scrum methodologies, stakeholder communication, risk management, and resource scheduling.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-eyebrow reveal" style="margin-bottom:32px;">Credentials & Certifications</div>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <div class="cert-issuer">Microsoft</div>
+        <div class="cert-name">Power BI Data Analyst</div>
+        <div class="cert-date">June 2025</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">Google</div>
+        <div class="cert-name">Data Analytics</div>
+        <div class="cert-date">June 2025</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">Google</div>
+        <div class="cert-name">Business Intelligence</div>
+        <div class="cert-date">June 2025</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">Google</div>
+        <div class="cert-name">AI Essentials</div>
+        <div class="cert-date">June 2025</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">Google</div>
+        <div class="cert-name">Project Management</div>
+        <div class="cert-date">May 2025</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">WHMIS</div>
+        <div class="cert-name">Workplace Hazardous Materials</div>
+        <div class="cert-date">Dec 2024</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-issuer">ICDL</div>
+        <div class="cert-name">International Computer Driving Licence</div>
+        <div class="cert-date">July 2016</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">A.SOLTAN</div>
+  <div class="footer-copy">© 2026 Ahmed Soltan · Mechanical Engineer · Ottawa, ON</div>
+</footer>
+
+<script>
+/* ============================================================
+   CURSOR
+============================================================ */
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a, button, .skill-tag, .project-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.width = '60px'; ring.style.height = '60px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
+
+/* ============================================================
+   PARTICLE BG CANVAS
+============================================================ */
+const bgCanvas = document.getElementById('bg-canvas');
+const bgCtx = bgCanvas.getContext('2d');
+let W, H, particles = [];
+function resizeBg() { W = bgCanvas.width = window.innerWidth; H = bgCanvas.height = window.innerHeight; }
+resizeBg();
+window.addEventListener('resize', resizeBg);
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.5 + 0.3
+  });
+}
+function drawBg() {
+  bgCtx.clearRect(0,0,W,H);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    bgCtx.beginPath();
+    bgCtx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    bgCtx.fillStyle = 'rgba(0,180,255,0.5)';
+    bgCtx.fill();
+  });
+  // connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i+1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx+dy*dy);
+      if (d < 120) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(particles[i].x, particles[i].y);
+        bgCtx.lineTo(particles[j].x, particles[j].y);
+        bgCtx.strokeStyle = `rgba(0,180,255,${0.12*(1-d/120)})`;
+        bgCtx.lineWidth = 0.5;
+        bgCtx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* ============================================================
+   COUNTER ANIMATION
+============================================================ */
+function animateCounters() {
+  document.querySelectorAll('[data-target]').forEach(el => {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const inc = target/60;
+    const timer = setInterval(() => {
+      current += inc;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current) + (target > 9 ? '+' : '');
+    }, 16);
+  });
+}
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); statsObs.disconnect(); } });
+}, { threshold: 0.5 });
+statsObs.observe(document.querySelector('.stats-bar'));
+
+/* ============================================================
+   SCROLL REVEAL
+============================================================ */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal, .timeline-item, .project-card').forEach(el => revealObs.observe(el));
+
+/* ============================================================
+   SCROLL PARALLAX SHAPES
+============================================================ */
+const shapes = [
+  { el: document.getElementById('shape1'), speedY: -0.18, speedR: 0.025, baseR: 0 },
+  { el: document.getElementById('shape2'), speedY: 0.12,  speedR: -0.018, baseR: 8 },
+  { el: document.getElementById('shape3'), speedY: -0.22, speedR: 0.03,  baseR: 0 },
+  { el: document.getElementById('shape4'), speedY: 0.16,  speedR: 0.022, baseR: -5 },
+];
+
+let scrollY = 0;
+let targetScrollY = 0;
+let animFrame2;
+
+// Show shapes after scrolling begins
+const shapeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) {
+      shapes.forEach(s => s.el && s.el.classList.add('visible'));
+      shapeObs.disconnect();
+    }
+  });
+}, { threshold: 0 });
+shapeObs.observe(document.getElementById('hero'));
+
+window.addEventListener('scroll', () => {
+  targetScrollY = window.scrollY;
+  // Show shapes after any scroll
+  shapes.forEach(s => s.el && s.el.classList.add('visible'));
+});
+
+function animateShapes() {
+  scrollY += (targetScrollY - scrollY) * 0.08;
+  const t = scrollY * 0.001;
+  shapes.forEach((s, i) => {
+    if (!s.el) return;
+    const translateY = scrollY * s.speedY;
+    const rotate = s.baseR + scrollY * s.speedR;
+    // slight breathing scale
+    const scale = 1 + Math.sin(t * 0.7 + i) * 0.04;
+    s.el.style.transform = `translateY(${translateY}px) rotate(${rotate}deg) scale(${scale})`;
+  });
+  requestAnimationFrame(animateShapes);
+}
+animateShapes();
+
+</script>
+</body>
+</html>
+
         h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; }
         h2 { font-size: 2.5rem; margin-bottom: 3rem; position: relative; display: inline-block; }
         h2::after {
